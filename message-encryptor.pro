@@ -1,7 +1,7 @@
 QT += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = AesMessageEncryptor
+TARGET = message-encryptor
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -10,17 +10,19 @@ CONFIG += c++17
 
 SOURCES += \
         source/main.cxx \
-        source/main_wnd.cxx \
-        dependencies/crypto.cxx
+        source/main_wnd.cxx
 
 HEADERS += \
         source/main_wnd.hxx \
-        dependencies/crypto.hxx
+        dependencies/abstract-ossl.hxx
 
 FORMS += \
         source/main_wnd.ui
 
 win32 {
+    LIBS += -L../../dependencies/lib/windows
+    LIBS += -lwindows_openssl_abstraction_layer
+
     # OpenSSL Include directory.
     INCLUDEPATH += C:/OpenSSL-Win64/include/
     DEPENDPATH += C:/OpenSSL-Win64/include/
@@ -36,8 +38,28 @@ win32 {
     CONFIG(debug, debug|release): LIBS += -llibcrypto64MDd
 }
 
+macx {
+    LIBS += -L../../dependencies/lib/osx
+    LIBS += -losx_openssl_abstraction_layer
+
+
+    INCLUDEPATH += /usr/local/include/
+    DEPENDPATH += /usr/local/include/
+    LIBS += -L/usr/local/lib/
+
+    # libcrypto.a Should be in /usr/local/lib
+    LIBS += -lcrypto
+
+    target.path = /usr/lib
+    INSTALLS += target
+}
+
 # Unix library linking, and include paths.
-unix {
+unix {    
+    LIBS += -L../../dependencies/lib/linux
+    LIBS += -llinux_openssl_abstraction_layer
+
+
     INCLUDEPATH += /usr/local/include/
     DEPENDPATH += /usr/local/include/
     LIBS += -L/usr/local/lib/
@@ -45,6 +67,7 @@ unix {
     # libcrypto.a Should be in /usr/local/lib
     LIBS += -lcrypto
 }
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
