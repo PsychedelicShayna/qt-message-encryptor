@@ -14,14 +14,14 @@ SOURCES += \
 
 HEADERS += \
         source/main_wnd.hxx \
-        dependencies/abstract-ossl.hxx
+        dependencies/crypto-utils.hxx
 
 FORMS += \
         source/main_wnd.ui
 
 win32 {
     LIBS += -L../../dependencies/lib/windows
-    LIBS += -lwindows_openssl_abstraction_layer
+    LIBS += -lwindows_crypto-utils
 
     # OpenSSL Include directory.
     INCLUDEPATH += C:/OpenSSL-Win64/include/
@@ -40,7 +40,7 @@ win32 {
 
 macx {
     LIBS += -L../../dependencies/lib/osx
-    LIBS += -losx_openssl_abstraction_layer
+    LIBS += -losx_crypto-utils
 
 
     INCLUDEPATH += /usr/local/include/
@@ -57,7 +57,7 @@ macx {
 # Unix library linking, and include paths.
 unix {    
     LIBS += -L../../dependencies/lib/linux
-    LIBS += -llinux_openssl_abstraction_layer
+    LIBS += -llinux_crypto-utils
 
 
     INCLUDEPATH += /usr/local/include/

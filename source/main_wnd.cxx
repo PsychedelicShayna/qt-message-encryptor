@@ -171,20 +171,14 @@ void MainWindow::on_pb_copy_their_decrypted_message_clicked() {
     clipboard->setText(decrypted_message);
 }
 
-MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(const QString* initial_stylesheet, QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    std::ifstream ifile_stream("./theme.qss", std::ios::binary);
-
-    if(ifile_stream.good()) {
-        const std::string style_sheet((std::istreambuf_iterator<char>(ifile_stream)), (std::istreambuf_iterator<char>()));
-        ifile_stream.close();
-
-        setStyleSheet(QString::fromStdString(style_sheet));
+    if(initial_stylesheet != nullptr) {
+        setStyleSheet(*initial_stylesheet);
     }
 
     localKeypair = nullptr;
-
 }
 
 MainWindow::~MainWindow() {
